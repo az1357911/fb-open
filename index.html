@@ -25,45 +25,32 @@
       text-decoration: none;
       display: inline-block;
     }
-    .btn-ios {
-      background-color: #007AFF;
-    }
     .loading {
       margin: 20px 0;
       display: none;
+      font-size: 14px;
+      color: #555;
     }
-    .fallback {
-      margin-top: 30px;
-      display: none;
-    }
-    #iosBtn, #androidBtn {
-      display: none;
+    .timer {
+      font-weight: bold;
+      color: #1877F2;
     }
   </style>
 </head>
 <body>
   <h1>Facebook 發文工具</h1>
-  <p>自動偵測到您的裝置類型</p>
+  <p>點擊按鈕開啟 Facebook 發文</p>
   
-  <div>
-    <a href="fb://composer" class="btn btn-ios" id="iosBtn">開啟 Facebook 發文</a>
-    <button class="btn" id="androidBtn">開啟 Facebook 發文</button>
-  </div>
+  <button class="btn" id="openBtn">開啟 Facebook 發文</button>
   
   <div class="loading" id="loadingMsg">
-    <p>正在嘗試開啟 Facebook 應用...</p>
-  </div>
-  
-  <div class="fallback" id="fallbackMsg">
-    <p>如果 Facebook 應用沒有自動開啟，請點擊下方按鈕：</p>
-    <a href="https://m.facebook.com/composer/" class="btn">使用網頁版開啟</a>
+    <p>正在嘗試開啟 Facebook 應用，<span class="timer" id="countdownTimer">3</span> 秒後自動轉至網頁版...</p>
   </div>
   
   <script>
-    const iosBtn = document.getElementById('iosBtn');
-    const androidBtn = document.getElementById('androidBtn');
+    const openBtn = document.getElementById('openBtn');
     const loadingMsg = document.getElementById('loadingMsg');
-    const fallbackMsg = document.getElementById('fallbackMsg');
+    const countdownTimer = document.getElementById('countdownTimer');
     
     // 偵測裝置和瀏覽器類型
     function detectDevice() {
@@ -73,53 +60,54 @@
       const isIOS = /iphone|ipad|ipod/.test(userAgent) || 
                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPad Pro 12.9" 
       
-      // 檢查是否為Safari瀏覽器
-      const isSafari = /safari/.test(userAgent) && !/chrome/.test(userAgent);
-      
       // 檢查是否為Android裝置
       const isAndroid = /android/.test(userAgent);
       
-      // 顯示對應的按鈕
-      if (isIOS || isSafari) {
-        iosBtn.style.display = 'inline-block';
-      } else if (isAndroid) {
-        androidBtn.style.display = 'inline-block';
-      } else {
-        // 如果無法確定裝置類型，顯示兩個按鈕
-        iosBtn.style.display = 'inline-block';
-        androidBtn.style.display = 'inline-block';
-        document.querySelector('p').textContent = '請選擇您的裝置類型：';
-      }
+      return { isIOS, isAndroid };
     }
     
-    function openFacebookForAndroid() {
+    function openFacebook() {
       loadingMsg.style.display = 'block';
       
-      // Intent URL 格式 (Android)
-      try {
+      const { isIOS, isAndroid } = detectDevice();
+      
+      // 嘗試開啟APP
+      if (isIOS) {
+        // iOS使用URL Scheme
+        window.location.href = 'fb://composer';
+      } else if (isAndroid) {
+        // Android使用Intent機制
         window.location.href = 'intent://composer#Intent;scheme=fb;package=com.facebook.katana;end';
-      } catch (e) {
-        console.error('Intent URL嘗試失敗', e);
-        
-        // 備用格式
+      } else {
+        // 其他裝置也嘗試兩種方式
         try {
-          window.location.href = 'intent://m.facebook.com/composer/#Intent;package=com.facebook.katana;scheme=https;end';
+          window.location.href = 'fb://composer';
         } catch (e) {
-          console.error('備用格式嘗試失敗', e);
+          console.error('iOS scheme失敗', e);
+        }
+        
+        try {
+          window.location.href = 'intent://composer#Intent;scheme=fb;package=com.facebook.katana;end';
+        } catch (e) {
+          console.error('Android intent失敗', e);
         }
       }
       
-      // 延遲顯示後備選項
-      setTimeout(() => {
-        fallbackMsg.style.display = 'block';
-      }, 2500);
+      // 倒數計時然後跳轉到網頁版
+      let countdown = 3;
+      const timer = setInterval(() => {
+        countdown--;
+        countdownTimer.textContent = countdown;
+        
+        if (countdown <= 0) {
+          clearInterval(timer);
+          window.location.href = 'https://m.facebook.com/composer/';
+        }
+      }, 1000);
     }
     
-    // 頁面載入時執行偵測
-    window.addEventListener('load', detectDevice);
-    
     // 設定按鈕事件監聽
-    androidBtn.addEventListener('click', openFacebookForAndroid);
+    openBtn.addEventListener('click', openFacebook);
   </script>
 </body>
 </html>
