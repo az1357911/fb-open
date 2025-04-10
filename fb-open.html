@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>打開 Facebook</title>
+</head>
+<body>
+  <p>正在為您打開 Facebook App...</p>
+
+  <script>
+    // 優先打開 Facebook App
+    window.location.href = "intent://m.facebook.com/egreenidv/#Intent;package=com.facebook.katana;scheme=https;end";
+
+    // 備援：1.5 秒後跳轉 Facebook 行動網頁版
+    setTimeout(() => {
+      window.location.href = "https://m.facebook.com/egreenidv/";
+    }, 1500);
+  </script>
+</body>
+</html>
