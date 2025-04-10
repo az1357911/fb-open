@@ -3,49 +3,243 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>打開 Facebook 發文</title>
+  <title>春草舒願 - 素食餐廳</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
   <style>
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      text-align: center;
-      padding: 20px;
-      max-width: 500px;
-      margin: 0 auto;
-      line-height: 1.5;
+    :root {
+      --primary-color: #5c9a4f;
+      --secondary-color: #8cc084;
+      --accent-color: #ffd166;
+      --text-color: #333;
+      --light-bg: #f8f9fa;
+      --white: #ffffff;
     }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      color: var(--text-color);
+      line-height: 1.6;
+      background-color: var(--light-bg);
+    }
+    
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header-content {
+      position: relative;
+      z-index: 2;
+    }
+    
+    header h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    
+    header p {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      opacity: 0.9;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .section {
+      padding: 3rem 0;
+      text-align: center;
+    }
+    
+    .section-title {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary-color);
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: var(--accent-color);
+    }
+    
+    .feature-box {
+      background-color: var(--white);
+      border-radius: 10px;
+      padding: 2rem;
+      margin: 1rem auto;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      max-width: 500px;
+    }
+    
     .btn {
-      background-color: #1877F2;
+      background-color: var(--primary-color);
       color: white;
       border: none;
       border-radius: 8px;
-      padding: 12px 20px;
-      font-size: 16px;
-      margin: 10px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      margin: 1rem 0;
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
+      font-weight: 500;
+      transition: all 0.3s ease;
     }
+    
+    .btn:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .btn-large {
+      font-size: 1.1rem;
+      padding: 15px 30px;
+    }
+    
     .loading {
       margin: 20px 0;
       display: none;
       font-size: 14px;
       color: #555;
+      background-color: var(--white);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
     }
+    
     .timer {
       font-weight: bold;
-      color: #1877F2;
+      color: var(--primary-color);
+    }
+    
+    .icon {
+      font-size: 3rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+    
+    .footer {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 2rem;
+    }
+    
+    .footer a {
+      color: white;
+      text-decoration: underline;
+    }
+    
+    .about-text {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    
+    .leaf-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.1;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="white" d="M30,90 C10,80 0,50 0,30 C0,10 15,0 30,0 C50,0 70,20 70,50 C70,80 50,100 30,90 Z"/></svg>');
+      background-size: 150px;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
-  <h1>Facebook 發文工具</h1>
-  <p>點擊按鈕開啟 Facebook 發文</p>
+  <header>
+    <div class="leaf-bg"></div>
+    <div class="header-content">
+      <h1>春草舒願</h1>
+      <p>用心料理的素食餐廳</p>
+    </div>
+  </header>
   
-  <button class="btn" id="openBtn">開啟 Facebook 發文</button>
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">關於我們</h2>
+      <div class="about-text">
+        <p>春草舒願是一家專注於提供健康、美味素食料理的餐廳。我們堅持選用新鮮、天然的食材，將每一道菜品精心製作，讓您在享受美食的同時，也能感受到我們對生活的熱愛與對健康的追求。</p>
+        <br>
+        <p>我們相信，素食不僅僅是一種飲食習慣，更是一種生活態度，一種對地球環境與生命的尊重。</p>
+      </div>
+    </div>
+  </section>
   
-  <div class="loading" id="loadingMsg">
-    <p>正在嘗試開啟 Facebook 應用，<span class="timer" id="countdownTimer">3</span> 秒後自動轉至網頁版...</p>
-  </div>
+  <section class="section" style="background-color: var(--white);">
+    <div class="container">
+      <h2 class="section-title">Facebook 打卡</h2>
+      <div class="feature-box">
+        <div class="icon">📍</div>
+        <p>在春草舒願用餐了嗎？別忘了在 Facebook 上打卡分享您的美食體驗！</p>
+        <button class="btn btn-large" id="openBtn">立即 Facebook 打卡</button>
+        
+        <div class="loading" id="loadingMsg">
+          <p>正在嘗試開啟 Facebook 應用，<span class="timer" id="countdownTimer">3</span> 秒後自動轉至網頁版...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">我們的特色</h2>
+      <div class="features">
+        <div class="feature-box">
+          <div class="icon">🌱</div>
+          <h3>新鮮食材</h3>
+          <p>我們堅持選用時令新鮮、有機的蔬果，確保每一道菜品都充滿自然的風味。</p>
+        </div>
+        
+        <div class="feature-box">
+          <div class="icon">👨‍🍳</div>
+          <h3>精心烹調</h3>
+          <p>我們的廚師團隊以創新的烹飪技巧，將傳統素食料理賦予現代風味。</p>
+        </div>
+        
+        <div class="feature-box">
+          <div class="icon">♻️</div>
+          <h3>環保理念</h3>
+          <p>我們注重環保細節，從食材選擇到包裝用品，盡可能減少對環境的影響。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <footer class="footer">
+    <div class="container">
+      <p>春草舒願 © 2024 版權所有</p>
+      <p>聯絡我們: <a href="tel:+886912345678">0912-345-678</a></p>
+      <p><a href="https://www.facebook.com/egreenidv" target="_blank">Facebook 粉絲專頁</a></p>
+    </div>
+  </footer>
   
   <script>
     const openBtn = document.getElementById('openBtn');
