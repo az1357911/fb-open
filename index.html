@@ -23,6 +23,9 @@
       margin: 10px;
       cursor: pointer;
     }
+    .btn-ios {
+      background-color: #007AFF;
+    }
     .loading {
       margin: 20px 0;
       display: none;
@@ -35,9 +38,12 @@
 </head>
 <body>
   <h1>Facebook 發文工具</h1>
-  <p>點擊下方按鈕開啟 Facebook 發文功能</p>
+  <p>請選擇您的裝置類型：</p>
   
-  <button class="btn" id="openBtn">開啟 Facebook 發文</button>
+  <div>
+    <a href="fb://composer" class="btn btn-ios">iOS 裝置</a>
+    <button class="btn" id="androidBtn">Android 裝置</button>
+  </div>
   
   <div class="loading" id="loadingMsg">
     <p>正在嘗試開啟 Facebook 應用...</p>
@@ -45,38 +51,22 @@
   
   <div class="fallback" id="fallbackMsg">
     <p>如果 Facebook 應用沒有自動開啟，請點擊下方按鈕：</p>
-    <button class="btn" id="webBtn">使用網頁版開啟</button>
+    <a href="https://m.facebook.com/composer/" class="btn" id="webBtn">使用網頁版開啟</a>
   </div>
   
   <script>
-    const openBtn = document.getElementById('openBtn');
+    const androidBtn = document.getElementById('androidBtn');
     const loadingMsg = document.getElementById('loadingMsg');
     const fallbackMsg = document.getElementById('fallbackMsg');
-    const webBtn = document.getElementById('webBtn');
     
-    function openFacebookComposer() {
+    function openFacebookForAndroid() {
       loadingMsg.style.display = 'block';
       
-      // 嘗試多種深度連結格式
-      // 1. 原生 fb:// 協議
-      try {
-        window.location.href = 'fb://composer';
-      } catch (e) {
-        console.error('原生深度連結嘗試失敗', e);
-      }
-      
-      // 2. Intent URL 格式 (Android)
+      // 嘗試Intent URL格式 (Android)
       try {
         window.location.href = 'intent://composer#Intent;scheme=fb;package=com.facebook.katana;end';
       } catch (e) {
         console.error('Intent URL嘗試失敗', e);
-      }
-      
-      // 3. 備用格式 (GPT提供的)
-      try {
-        window.location.href = 'intent://m.facebook.com/composer/#Intent;package=com.facebook.katana;scheme=https;end';
-      } catch (e) {
-        console.error('備用格式嘗試失敗', e);
       }
       
       // 延遲顯示後備選項
@@ -85,10 +75,7 @@
       }, 2500);
     }
     
-    openBtn.addEventListener('click', openFacebookComposer);
-    webBtn.addEventListener('click', () => {
-      window.location.href = 'https://m.facebook.com/composer/';
-    });
+    androidBtn.addEventListener('click', openFacebookForAndroid);
   </script>
 </body>
 </html>
