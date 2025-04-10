@@ -3,19 +3,92 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>打開 Facebook Composer</title>
+  <title>打開 Facebook 發文</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      text-align: center;
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+    .btn {
+      background-color: #1877F2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 16px;
+      margin: 10px;
+      cursor: pointer;
+    }
+    .loading {
+      margin: 20px 0;
+      display: none;
+    }
+    .fallback {
+      margin-top: 30px;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-  <p>正在為您打開 Facebook App 發文頁面...</p>
-
+  <h1>Facebook 發文工具</h1>
+  <p>點擊下方按鈕開啟 Facebook 發文功能</p>
+  
+  <button class="btn" id="openBtn">開啟 Facebook 發文</button>
+  
+  <div class="loading" id="loadingMsg">
+    <p>正在嘗試開啟 Facebook 應用...</p>
+  </div>
+  
+  <div class="fallback" id="fallbackMsg">
+    <p>如果 Facebook 應用沒有自動開啟，請點擊下方按鈕：</p>
+    <button class="btn" id="webBtn">使用網頁版開啟</button>
+  </div>
+  
   <script>
-    // 優先打開 Facebook App 的發文介面
-    window.location.href = "intent://m.facebook.com/composer/#Intent;package=com.facebook.katana;scheme=https;end";
-
-    // 備援：1.5 秒後跳轉 Facebook 行動網頁版的發文介面
-    setTimeout(() => {
-      window.location.href = "https://m.facebook.com/composer/";
-    }, 1500);
+    const openBtn = document.getElementById('openBtn');
+    const loadingMsg = document.getElementById('loadingMsg');
+    const fallbackMsg = document.getElementById('fallbackMsg');
+    const webBtn = document.getElementById('webBtn');
+    
+    function openFacebookComposer() {
+      loadingMsg.style.display = 'block';
+      
+      // 嘗試多種深度連結格式
+      // 1. 原生 fb:// 協議
+      try {
+        window.location.href = 'fb://composer';
+      } catch (e) {
+        console.error('原生深度連結嘗試失敗', e);
+      }
+      
+      // 2. Intent URL 格式 (Android)
+      try {
+        window.location.href = 'intent://composer#Intent;scheme=fb;package=com.facebook.katana;end';
+      } catch (e) {
+        console.error('Intent URL嘗試失敗', e);
+      }
+      
+      // 3. 備用格式 (GPT提供的)
+      try {
+        window.location.href = 'intent://m.facebook.com/composer/#Intent;package=com.facebook.katana;scheme=https;end';
+      } catch (e) {
+        console.error('備用格式嘗試失敗', e);
+      }
+      
+      // 延遲顯示後備選項
+      setTimeout(() => {
+        fallbackMsg.style.display = 'block';
+      }, 2500);
+    }
+    
+    openBtn.addEventListener('click', openFacebookComposer);
+    webBtn.addEventListener('click', () => {
+      window.location.href = 'https://m.facebook.com/composer/';
+    });
   </script>
 </body>
 </html>
